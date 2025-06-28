@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificate Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-section">
+        <h1>Certificate Generator</h1>
+        <form id="certificateForm">
+          <div class="form-group">
+            <label for="studentName">Student Name:</label>
+            <input
+              type="text"
+              id="studentName"
+              name="studentName"
+              value="Alan Chow"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="courseName">Course Name:</label>
+            <input
+              type="text"
+              id="courseName"
+              name="courseName"
+              value="C++ Fundamentals for Busy Teens"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="courseDate">Course Date:</label>
+            <input
+              type="text"
+              id="courseDate"
+              name="courseDate"
+              value="June, 2025"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="cohort">Cohort:</label>
+            <input type="text" id="cohort" name="cohort" value="001" required />
+          </div>
+
+          <div class="form-group">
+            <label for="instructor">Instructor:</label>
+            <input
+              type="text"
+              id="instructor"
+              name="instructor"
+              value="Robert Wayne"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="instructorTitle">Instructor Title:</label>
+            <input
+              type="text"
+              id="instructorTitle"
+              name="instructorTitle"
+              value="Coding Instructor"
+              required
+            />
+          </div>
+
+          <button type="button" id="generateBtn">Generate Certificate</button>
+          <button type="button" id="downloadBtn">Download Certificate</button>
+        </form>
+      </div>
+
+      <div class="certificate-section">
+        <div id="certificate" class="certificate">
+          <div class="certificate-header">
+            <img
+              src="header-section.jpg"
+              alt="Certificate Header"
+              class="header-section-img"
+            />
+          </div>
+
+          <div class="certificate-body">
+            <div class="medal-section">
+              <img
+                src="gold-medal.jpg"
+                alt="Gold Medal"
+                class="gold-medal-img"
+              />
+              <div class="cohort-text" id="certCohort">Cohort 001</div>
+            </div>
+
+            <div class="content-section">
+              <p class="awarded-text">THIS CERTIFICATE IS AWARDED TO</p>
+              <h3 class="student-name" id="certStudentName">Alan Chow</h3>
+              <p class="course-text">
+                for completing the
+                <span class="course-name" id="certCourseName"
+                  >C++ Fundamentals for Busy Teens</span
+                ><br />
+                course, conducted in
+                <span class="course-date" id="certCourseDate">June, 2025</span>.
+              </p>
+            </div>
+          </div>
+
+          <div class="certificate-footer">
+            <div class="signature-section">
+              <div class="signature-line"></div>
+              <div class="instructor-name" id="certInstructor">
+                Robert Wayne
+              </div>
+              <div class="instructor-title" id="certInstructorTitle">Coding Instructor</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
