@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const instructorTitleInput = document.getElementById('instructorTitle');
     const studentListInput = document.getElementById('studentList');
     const batchDownloadBtn = document.getElementById('batchDownloadBtn');
+    const clearFormBtn = document.getElementById('clearFormBtn');
     
     const certStudentName = document.getElementById('certStudentName');
     const certCourseName = document.getElementById('certCourseName');
@@ -19,6 +20,42 @@ document.addEventListener('DOMContentLoaded', function() {
     const certInstructor = document.getElementById('certInstructor');
     const certInstructorTitle = document.getElementById('certInstructorTitle');
     
+    // Auto-save and load functionality
+    function saveFormData() {
+        const formData = {
+            studentName: studentNameInput.value,
+            courseName: courseNameInput.value,
+            courseDate: courseDateInput.value,
+            cohort: cohortInput.value,
+            instructor: instructorInput.value,
+            instructorTitle: instructorTitleInput.value,
+            studentList: studentListInput.value
+        };
+        localStorage.setItem('certificateFormData', JSON.stringify(formData));
+    }
+    
+    function loadFormData() {
+        try {
+            const savedData = localStorage.getItem('certificateFormData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                
+                studentNameInput.value = formData.studentName || '';
+                courseNameInput.value = formData.courseName || 'C++ Fundamentals for Busy Teens';
+                courseDateInput.value = formData.courseDate || 'June, 2025';
+                cohortInput.value = formData.cohort || '001';
+                instructorInput.value = formData.instructor || 'Robert Wayne';
+                instructorTitleInput.value = formData.instructorTitle || 'Coding Instructor';
+                studentListInput.value = formData.studentList || '';
+                
+                // Update certificate preview after loading
+                updateCertificate();
+            }
+        } catch (error) {
+            console.error('Error loading saved form data:', error);
+        }
+    }
+    
     function updateCertificate() {
         certStudentName.textContent = studentNameInput.value || 'Student Name';
         certCourseName.textContent = courseNameInput.value || 'Course Name';
@@ -26,14 +63,19 @@ document.addEventListener('DOMContentLoaded', function() {
         certCohort.textContent = cohortInput.value ? `Cohort ${cohortInput.value}` : 'Cohort';
         certInstructor.textContent = instructorInput.value || 'Instructor Name';
         certInstructorTitle.textContent = instructorTitleInput.value || 'Instructor Title';
+        
+        // Auto-save form data whenever certificate is updated
+        saveFormData();
     }
     
+    // Add auto-save to all input fields
     studentNameInput.addEventListener('input', updateCertificate);
     courseNameInput.addEventListener('input', updateCertificate);
     courseDateInput.addEventListener('input', updateCertificate);
     cohortInput.addEventListener('input', updateCertificate);
     instructorInput.addEventListener('input', updateCertificate);
     instructorTitleInput.addEventListener('input', updateCertificate);
+    studentListInput.addEventListener('input', saveFormData);
     
     function validateForm() {
         const inputs = [studentNameInput, courseNameInput, courseDateInput, cohortInput, instructorInput, instructorTitleInput];
@@ -242,5 +284,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    updateCertificate();
+    // Clear saved form data
+    clearFormBtn.addEventListener('click', function() {
+        if (confirm('Are you sure you want to clear all saved form data?')) {
+            localStorage.removeItem('certificateFormData');
+            
+            // Reset form to default values
+            studentNameInput.value = 'Alan Chow';
+            courseNameInput.value = 'C++ Fundamentals for Busy Teens';
+            courseDateInput.value = 'June, 2025';
+            cohortInput.value = '001';
+            instructorInput.value = 'Robert Wayne';
+            instructorTitleInput.value = 'Coding Instructor';
+            studentListInput.value = '';
+            
+            updateCertificate();
+            
+            // Visual feedback
+            clearFormBtn.textContent = 'Cleared ✓';
+            setTimeout(() => {
+                clearFormBtn.textContent = 'Clear Saved Data';
+            }, 2000);
+        }
+    });
+    
+    // Load saved form data on page load
+    loadFormData();
+    
+    // If no saved data, update certificate with default values
+    if (!localStorage.getItem('certificateFormData')) {
+        updateCertificate();
+    }
 });
