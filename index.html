@@ -6,7 +6,7 @@
     <title>Certificate Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -76,6 +76,20 @@
 
           <button type="button" id="generateBtn">Generate Certificate</button>
           <button type="button" id="downloadBtn">Download Certificate</button>
+          
+          <hr style="margin: 30px 0; border: 1px solid #e5e7eb;">
+          
+          <h3>Batch Download</h3>
+          <div class="form-group">
+            <label for="studentList">Student Names (one per line):</label>
+            <textarea 
+              id="studentList" 
+              rows="8" 
+              placeholder="Alan Chow&#10;Jane Smith&#10;John Doe&#10;Sarah Wilson"
+              style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: 'IBM Plex Sans', sans-serif; resize: vertical;"
+            ></textarea>
+          </div>
+          <button type="button" id="batchDownloadBtn">Download All Certificates</button>
         </form>
       </div>
 

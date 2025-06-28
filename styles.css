@@ -134,22 +134,24 @@ button:hover {
 
 .awarded-text {
     font-family: 'Source Sans Pro', sans-serif;
-    font-size: 16px;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 2.5px;
+    margin-bottom: 25px;
+    font-weight: 700;
     text-transform: uppercase;
-    color: #374151;
+    color: #1f2937;
+    opacity: 0.8;
 }
 
 .student-name {
-    font-family: 'IBM Plex Serif', serif;
-    font-size: 50px;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 56px;
     font-weight: 600;
-    color: #111827;
+    color: #0f172a;
     margin-bottom: 30px;
-    line-height: 1.1;
-    letter-spacing: -0.5px;
+    line-height: 1.0;
+    letter-spacing: -0.8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .course-text {
@@ -163,25 +165,27 @@ button:hover {
 
 .course-name {
     font-weight: 700;
-    color: #111827;
-    font-family: 'Source Sans Pro', sans-serif;
-    letter-spacing: 0.3px;
+    color: #0f172a;
+    font-family: 'IBM Plex Serif', serif;
+    letter-spacing: 0.2px;
+    font-style: italic;
 }
 
 .course-date {
     font-weight: 700;
-    color: #111827;
-    font-family: 'Source Sans Pro', sans-serif;
-    letter-spacing: 0.3px;
+    color: #0f172a;
+    font-family: 'IBM Plex Serif', serif;
+    letter-spacing: 0.2px;
+    font-style: italic;
 }
 
 .cohort-text {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 24px;
-    font-weight: 600;
-    color: #111827;
-    margin-top: 15px;
-    letter-spacing: 1px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 18px;
+    letter-spacing: 1.5px;
 }
 
 .certificate-footer {
@@ -204,20 +208,20 @@ button:hover {
 }
 
 .instructor-name {
-    font-family: 'IBM Plex Serif', serif;
-    font-size: 24px;
+    font-family: 'Crimson Text', serif;
+    font-size: 26px;
     font-weight: 600;
-    color: #111827;
-    margin-bottom: 5px;
-    letter-spacing: 0.2px;
+    color: #0f172a;
+    margin-bottom: 6px;
+    letter-spacing: 0.1px;
 }
 
 .instructor-title {
     font-family: 'Source Sans Pro', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #6b7280;
-    letter-spacing: 0.8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 1px;
     text-transform: uppercase;
 }
 

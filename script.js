@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const cohortInput = document.getElementById('cohort');
     const instructorInput = document.getElementById('instructor');
     const instructorTitleInput = document.getElementById('instructorTitle');
+    const studentListInput = document.getElementById('studentList');
+    const batchDownloadBtn = document.getElementById('batchDownloadBtn');
     
     const certStudentName = document.getElementById('certStudentName');
     const certCourseName = document.getElementById('certCourseName');
@@ -128,6 +130,116 @@ document.addEventListener('DOMContentLoaded', function() {
             downloadBtn.textContent = originalText;
             downloadBtn.disabled = false;
         });
+    });
+    
+    // Batch download functionality
+    async function downloadCertificateForStudent(studentName) {
+        return new Promise((resolve, reject) => {
+            // Temporarily update the certificate with the student name
+            const originalName = certStudentName.textContent;
+            certStudentName.textContent = studentName;
+            
+            const certificate = document.getElementById('certificate');
+            const originalBorderRadius = certificate.style.borderRadius;
+            certificate.style.borderRadius = '0';
+            
+            // Use same high-DPI settings as single download
+            const targetWidth = 3300;
+            const targetHeight = 2550;
+            const currentWidth = 800;
+            const currentHeight = 600;
+            const scaleX = targetWidth / currentWidth;
+            const scaleY = targetHeight / currentHeight;
+            const scale = Math.max(scaleX, scaleY);
+            
+            html2canvas(certificate, {
+                width: currentWidth,
+                height: currentHeight,
+                scale: scale,
+                useCORS: true,
+                allowTaint: false,
+                backgroundColor: '#ffffff',
+                logging: false
+            }).then(function(canvas) {
+                const dataUrl = canvas.toDataURL('image/png', 1.0);
+                
+                // Restore original name and styling
+                certStudentName.textContent = originalName;
+                certificate.style.borderRadius = originalBorderRadius;
+                
+                resolve({
+                    name: studentName,
+                    dataUrl: dataUrl,
+                    fileName: `${studentName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_certificate.png`
+                });
+            }).catch(function(error) {
+                // Restore original name and styling on error
+                certStudentName.textContent = originalName;
+                certificate.style.borderRadius = originalBorderRadius;
+                reject(error);
+            });
+        });
+    }
+    
+    batchDownloadBtn.addEventListener('click', async function() {
+        const studentNames = studentListInput.value
+            .split('\n')
+            .map(name => name.trim())
+            .filter(name => name.length > 0);
+        
+        if (studentNames.length === 0) {
+            alert('Please enter at least one student name.');
+            return;
+        }
+        
+        // Validate other required fields
+        if (!validateForm()) {
+            alert('Please fill in all certificate details before batch downloading.');
+            return;
+        }
+        
+        const originalText = batchDownloadBtn.textContent;
+        batchDownloadBtn.textContent = 'Generating...';
+        batchDownloadBtn.disabled = true;
+        
+        try {
+            // Generate certificates for all students
+            for (let i = 0; i < studentNames.length; i++) {
+                const studentName = studentNames[i];
+                batchDownloadBtn.textContent = `Generating ${i + 1}/${studentNames.length}...`;
+                
+                const certificate = await downloadCertificateForStudent(studentName);
+                
+                // Create download link
+                const link = document.createElement('a');
+                link.download = certificate.fileName;
+                link.href = certificate.dataUrl;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Small delay between downloads to avoid overwhelming the browser
+                if (i < studentNames.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+            }
+            
+            batchDownloadBtn.textContent = `Downloaded ${studentNames.length} certificates ✓`;
+            batchDownloadBtn.style.backgroundColor = '#27ae60';
+            
+            setTimeout(() => {
+                batchDownloadBtn.textContent = originalText;
+                batchDownloadBtn.style.backgroundColor = '#4a3c8a';
+                batchDownloadBtn.disabled = false;
+            }, 3000);
+            
+        } catch (error) {
+            console.error('Error in batch download:', error);
+            alert('Error generating certificates. Please try again.');
+            batchDownloadBtn.textContent = originalText;
+            batchDownloadBtn.disabled = false;
+        }
     });
     
     updateCertificate();
