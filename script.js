@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('certificateForm');
     const generateBtn = document.getElementById('generateBtn');
     const downloadBtn = document.getElementById('downloadBtn');
+    const shareBtn = document.getElementById('shareBtn');
     
     const studentNameInput = document.getElementById('studentName');
     const courseNameInput = document.getElementById('courseName');
@@ -308,11 +309,128 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Share functionality
+    shareBtn.addEventListener('click', function() {
+        if (!validateForm()) {
+            alert('Please fill in all required fields before sharing.');
+            return;
+        }
+        
+        // Create URL with form data
+        const formData = {
+            studentName: studentNameInput.value,
+            courseName: courseNameInput.value,
+            courseDate: courseDateInput.value,
+            cohort: cohortInput.value,
+            instructor: instructorInput.value,
+            instructorTitle: instructorTitleInput.value,
+            studentList: studentListInput.value.replace(/\n/g, '|')
+        };
+        
+        const urlParams = new URLSearchParams();
+        Object.keys(formData).forEach(key => {
+            if (formData[key]) {
+                urlParams.append(key, formData[key]);
+            }
+        });
+        
+        const shareUrl = `${window.location.origin}${window.location.pathname}?${urlParams.toString()}`;
+        
+        // Try to use native share API first
+        if (navigator.share) {
+            navigator.share({
+                title: `Certificate for ${studentNameInput.value}`,
+                text: `View the certificate for ${studentNameInput.value} who completed ${courseNameInput.value}`,
+                url: shareUrl
+            }).catch(err => {
+                console.log('Error sharing:', err);
+                fallbackCopyToClipboard(shareUrl);
+            });
+        } else {
+            fallbackCopyToClipboard(shareUrl);
+        }
+    });
+    
+    function fallbackCopyToClipboard(url) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(() => {
+                showShareFeedback('Link copied to clipboard!');
+            }).catch(() => {
+                showManualCopy(url);
+            });
+        } else {
+            showManualCopy(url);
+        }
+    }
+    
+    function showManualCopy(url) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center;
+            justify-content: center; z-index: 1000;
+        `;
+        
+        const content = document.createElement('div');
+        content.style.cssText = `
+            background: white; padding: 30px; border-radius: 10px;
+            max-width: 500px; width: 90%;
+        `;
+        
+        content.innerHTML = `
+            <h3 style="margin-top: 0;">Share Certificate</h3>
+            <p>Copy this link to share the certificate:</p>
+            <input type="text" value="${url}" readonly style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px;">
+            <div style="text-align: right;">
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="padding: 10px 20px; background: #4a3c8a; color: white; border: none; border-radius: 5px; cursor: pointer;">Close</button>
+            </div>
+        `;
+        
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+        
+        // Select the URL text
+        const input = content.querySelector('input');
+        input.select();
+        input.setSelectionRange(0, 99999);
+    }
+    
+    function showShareFeedback(message) {
+        const originalTitle = shareBtn.title;
+        shareBtn.title = message;
+        shareBtn.style.backgroundColor = '#e8f5e8';
+        setTimeout(() => {
+            shareBtn.title = originalTitle;
+            shareBtn.style.backgroundColor = 'transparent';
+        }, 2000);
+    }
+    
+    // Load URL parameters on page load
+    function loadFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        if (urlParams.has('studentName')) {
+            studentNameInput.value = urlParams.get('studentName') || '';
+            courseNameInput.value = urlParams.get('courseName') || 'C++ Fundamentals for Busy Teens';
+            courseDateInput.value = urlParams.get('courseDate') || 'June, 2025';
+            cohortInput.value = urlParams.get('cohort') || '001';
+            instructorInput.value = urlParams.get('instructor') || 'Robert Wayne';
+            instructorTitleInput.value = urlParams.get('instructorTitle') || 'Coding Instructor';
+            studentListInput.value = (urlParams.get('studentList') || '').replace(/\|/g, '\n');
+            
+            updateCertificate();
+            
+            // Clear URL parameters after loading
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }
+    
     // Load saved form data on page load
+    loadFromUrl();
     loadFormData();
     
-    // If no saved data, update certificate with default values
-    if (!localStorage.getItem('certificateFormData')) {
+    // If no saved data and no URL params, update certificate with default values
+    if (!localStorage.getItem('certificateFormData') && !window.location.search) {
         updateCertificate();
     }
 });

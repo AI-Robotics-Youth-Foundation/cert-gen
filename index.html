@@ -12,7 +12,18 @@
   <body>
     <div class="container">
       <div class="form-section">
-        <h1>Certificate Generator</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h1 style="margin: 0;">Certificate Generator</h1>
+          <button type="button" id="shareBtn" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 50%; transition: background-color 0.2s; color: #4a3c8a;" title="Share Certificate" onmouseover="this.style.backgroundColor='#f3f4f6'" onmouseout="this.style.backgroundColor='transparent'">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </button>
+        </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
           <span style="font-size: 12px; color: #6b7280;">✓ Form auto-saves to browser</span>
           <button type="button" id="clearFormBtn" style="font-size: 12px; padding: 4px 8px; background: #ef4444; color: white; border: none; border-radius: 3px; cursor: pointer;">Clear Saved Data</button>
